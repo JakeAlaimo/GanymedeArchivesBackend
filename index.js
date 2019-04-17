@@ -1,7 +1,7 @@
 const request = require('request');
 const app = require("express")();
 const cors = require("cors");
-const jsonFile = require("jsonFile");
+const jsonFile = require("jsonfile");
 
 const PORT = process.env.PORT||3000;
 
