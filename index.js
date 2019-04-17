@@ -1,8 +1,10 @@
 const request = require('request');
 const app = require("express")();
+const cors = require("cors");
 const PORT = process.env.PORT||3000;
 
-app.use(allowCrossDomain)
+//allow CORS with our website specifically
+app.use(cors(/*{origin: 'http://www.ganymedearchives.com'}*/));
 
 app.listen(PORT, () => console.log(`Example app listening on port ${PORT}!`));
 
