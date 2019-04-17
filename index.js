@@ -1,7 +1,11 @@
 const request = require('request');
 const app = require("express")();
 const cors = require("cors");
+const jsonFile = require("jsonFile");
+
 const PORT = process.env.PORT||3000;
+
+const publicData = "/Data/cardData.json";
 
 //allow CORS with our website specifically
 app.use(cors(/*{origin: 'http://www.ganymedearchives.com'}*/));
@@ -10,8 +14,10 @@ app.listen(PORT, () => console.log(`Example app listening on port ${PORT}!`));
 
 //HANDLE CLIENT INTERFACE BELOW////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
  app.get("/", (req, res) => {
+    let data;
+    jsonFile.readFile(publicData, (err, obj) => {data = obj;})
      res.send(
-         "<p>Here we return the client rquest. please work. </p>"
+         data
      );
  });
 
