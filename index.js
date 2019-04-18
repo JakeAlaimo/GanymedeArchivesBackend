@@ -5,63 +5,51 @@ const jsonFile = require("jsonfile");
 
 const PORT = process.env.PORT||3000;
 
-const publicData = "/Data/cardData.json";
-
 //allow CORS with our website specifically
 app.use(cors(/*{origin: 'http://www.ganymedearchives.com'}*/));
 
-app.listen(PORT, () => console.log(`Example app listening on port ${PORT}!`));
+//begin listening on the given port
+app.listen(PORT, () => console.log(`Listening on port ${PORT}!`));
 
-//HANDLE CLIENT INTERFACE BELOW////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
- app.get("/", (req, res) => {
-    let data;
-    jsonFile.readFile(publicData, (err, obj) => {data = obj;})
-     res.send(
-         data
-     );
 
-     console.log("JSON: " + JSON.stringify(data) );
+const publicData = "./Data/cardData.json";
+let cardData; //reads and writes from the publicData address
+
+//prepare cardData for use
+ReadPublicData();
+
+
+//Handle client interface
+ app.get("/api/Card/", (req, res) => {
+    
+    if(req.query.card_name == undefined || !cardData.hasOwnProperty(req.query.card_name)) //improperly formed request sent
+    {
+        res.json({error: 'Search failed.'});
+    }
+    else //a card name query was provided and exists in the json
+    {
+        //return the appropriate data
+        res.json(cardData[req.query.card_name]);
+        console.log(cardData[req.query.card_name]);
+        console.log(req.query.card_name);
+    }
+
  });
 
-//UPDATE CARD ANALYTICS BELOW//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ app.get("/Update/", (req, res) => {
+    
+    ReadPublicData();
+    console.log("updated card data");
+ });
 
-let page = 1; //the current page the backend is checking
-let pages;    //the total pages available to be checked
-let url = `https://www.keyforgegame.com/api/decks/?wins=1,100&losses=1,100000&page=${page}&page_size=25&links=cards`;
-
-let matchedDecks; //the total number of decks that fit the API request
-
-//Every X minutes, request 50 more pages of decks to be updated
-//TODO add interval here
-    //first, update the page count
-    // request(url, (err, response, body) => {
-    //     // if there's no error, and if the server's status code is 200 (i.e. "Ok")
-    //     if(!err && response.statusCode == 200){
-    //         // A - convert the downloaded text to a JavaScript Object (in this case an array)
-    //         let data = JSON.parse(body); 
-            
-    //         matchedDecks = data.count;
-
-    //         pages = Math.floor(matchedDecks / 25); //split the available decks into separate page loads
-
-    //         console.log("Total pages: " + pages);
-
-    //         for(let i = 0; i < 50; i++)
-    //         {
-    //             url = `https://www.keyforgegame.com/api/decks/?wins=1,100&losses=1,100000&page=${page}&page_size=25&links=cards`;
-    //             page = page + 1;
-    //             page = page % pages;
-
-    //             request(url, (err, response, body) => {
-    //                 // if there's no error, and if the server's status code is 200 (i.e. "Ok")
-    //                 if(!err && response.statusCode == 200){
-    //                     console.log("Page loaded: " + page);
-    //                     console.log("Deck Name: " + JSON.parse(body).data["0"].name);
-
-                        
-    //                 }
-    //             });
-    //         }
-
-    //     }
-    // });
+ function ReadPublicData()
+ {
+     jsonFile.readFile(publicData, (err, obj) => {
+         if (err) 
+             console.log(err);
+         else
+         {
+             cardData = obj; 
+         }
+     });
+ }
