@@ -116,7 +116,7 @@ request(url, (err, response, body) => {
                     return;
                 }
             });
-        }, 12000); //12 second breaks between each page to prevent throttling. Curently 25 requests allowed per 5 minutes
+        }, 20000); //20 second breaks between each page to prevent throttling
     }
     else //if the initial API request failed
     {
