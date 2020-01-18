@@ -1,7 +1,8 @@
 const request = require('request');
-const jsonFile = require("jsonfile");
-console.log(process.env.REDIS_URL);
-var redis = require('redis').createClient(process.env.REDIS_URL);
+//const jsonFile = require("jsonfile");
+
+
+const redis = require('redis').createClient(process.env.REDIS_URL);
 
 const publicData = "./Data/cardData.json";
 
@@ -88,11 +89,13 @@ request(url, (err, response, body) => {
                         }
 
                         //update the cardData with the final information
-                        jsonFile.writeFile(publicData, tempData, function (err) {
+                        /*jsonFile.writeFile(publicData, tempData, function (err) {
                             if (err) console.error(err)
-                        });
-
-                        redis.set('CardData',tempData,function(err) {console.log(err);});
+                        });*/
+                        redis.set('CardData', JSON.stringify(tempData),function(err) {
+                            if(err) console.log(err); 
+                            redis.quit();
+                        }); //send all of the card data to storage
 
                         console.log("Card data updated.");
 

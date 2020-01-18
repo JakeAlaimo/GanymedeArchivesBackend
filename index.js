@@ -1,7 +1,9 @@
-const request = require('request');
+//const request = require('request');
 const app = require("express")();
 const cors = require("cors");
-const jsonFile = require("jsonfile");
+//const jsonFile = require("jsonfile");
+
+const redis = require('redis');
 
 const PORT = process.env.PORT||3000;
 
@@ -12,7 +14,7 @@ app.use(cors(/*{origin: 'http://www.ganymedearchives.com'}*/));
 app.listen(PORT, () => console.log(`Listening on port ${PORT}!`));
 
 
-const publicData = "./Data/cardData.json";
+//const publicData = "./Data/cardData.json";
 let cardData; //reads and writes from the publicData address
 
 //prepare cardData for use
@@ -49,12 +51,27 @@ ReadPublicData();
 
  function ReadPublicData()
  {
-     jsonFile.readFile(publicData, (err, obj) => {
-         if (err) 
-             console.log(err);
-         else
-         {
-             cardData = obj; 
-         }
-     });
+    /*jsonFile.readFile(publicData, (err, obj) => {
+        if (err) 
+            console.log(err);
+        else
+        {
+            cardData = obj; 
+        }
+    });*/
+    
+    let redisClient = redis.createClient(process.env.REDIS_URL);
+
+    //retrieve cardData from redis storage
+    redisClient.get('CardData', function(err, val) {
+        if(err) 
+            console.log(err);
+        else cardData = JSON.parse(val);
+
+        redisClient.quit();
+
+        console.log(cardData["Faygin"]);
+    });
+
+   
  }
