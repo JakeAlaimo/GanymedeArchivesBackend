@@ -1,5 +1,7 @@
 const request = require('request');
 const jsonFile = require("jsonfile");
+console.log(process.env.REDIS_URL);
+var redis = require('redis').createClient(process.env.REDIS_URL);
 
 const publicData = "./Data/cardData.json";
 
@@ -89,6 +91,8 @@ request(url, (err, response, body) => {
                         jsonFile.writeFile(publicData, tempData, function (err) {
                             if (err) console.error(err)
                         });
+
+                        redis.set('CardData',tempData,function(err) {console.log(err);});
 
                         console.log("Card data updated.");
 
