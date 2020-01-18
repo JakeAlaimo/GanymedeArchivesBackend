@@ -42,6 +42,11 @@ ReadPublicData();
     console.log("updated card data");
  });
 
+ app.get("/Dump/", (req, res) => {
+    //ReadPublicData();
+    res.json(cardData);
+ });
+
  function ReadPublicData()
  {
      jsonFile.readFile(publicData, (err, obj) => {
