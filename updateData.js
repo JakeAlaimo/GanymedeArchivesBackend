@@ -62,7 +62,7 @@ request(url, (err, response, body) => {
                     }
                     
 
-                    if(processed == /*pages*/2) //the final page has been processed
+                    if(processed == pages) //the final page has been processed
                     {
                         clearInterval(intervalObject); //stop the interval (and processing pages)
 
