@@ -69,8 +69,6 @@ ReadPublicData();
         else cardData = JSON.parse(val);
 
         redisClient.quit();
-
-        console.log(cardData["Faygin"]);
     });
 
    
