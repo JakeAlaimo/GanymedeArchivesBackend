@@ -20,8 +20,8 @@ request(url, (err, response, body) => {
     // if there's no error, and if the server's status code is 200 (i.e. "Ok")
     if(!err && response.statusCode == 200)
     {
-       // let startTime = Date.now();
-       // console.log("Start time: " + startTime);  //useful for determining the API's rate limit, but shouldn't be needed atm
+        let startTime = Date.now();
+        console.log("Start time: " + startTime);  //useful for determining the API's rate limit, but shouldn't be needed atm
 
         let data = JSON.parse(body); 
     
@@ -116,7 +116,7 @@ request(url, (err, response, body) => {
                     return;
                 }
             });
-        }, 20000); //20 second breaks between each page to prevent throttling
+        }, 13000); //13 second breaks between each page to prevent throttling
     }
     else //if the initial API request failed
     {
