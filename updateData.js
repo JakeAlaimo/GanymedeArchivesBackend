@@ -35,7 +35,7 @@ request(url, (err, response, body) => {
         //now process all of the pages, one at a time. Request once every 12 seconds
         var intervalObject = setInterval(function () { 
             
-            url = `https://www.keyforgegame.com/api/decks/?wins=1,100&losses=1,100000&page=${page}&page_size=25&links=cards`;
+            url = `https://www.keyforgegame.com/api/decks/?wins=1,10000&losses=1,100000&page=${page}&page_size=25&links=cards`;
             
             page = page + 1;
 
